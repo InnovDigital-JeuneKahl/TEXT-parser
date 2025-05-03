@@ -280,16 +280,18 @@ async def search_existing_document(search_request: SearchRequest):
 @app.post("/search", response_model=Dict)
 async def search_uploaded_file(
     file: UploadFile = File(...),
-    search_terms: str = Form(...),
+    searchTerm: str = Form(...),
     language: str = Form("en"),
     context_size: int = Form(1)
 ):
+    print(f"Received search request for file: {file.filename} with terms: {searchTerm}")
     """Upload a document and immediately search for terms"""
     # Process the file
     result = process_uploaded_file(file)
+
     
     # Parse search terms from string (comma separated)
-    terms = [term.strip() for term in search_terms.split(",")]
+    terms = [term.strip() for term in searchTerm.split(",")]
     
     # Perform search
     search_results = find_all_sentence_contexts(
